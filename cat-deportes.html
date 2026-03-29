@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Digitalnext — Deportes</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="container">
+      <div class="header-inner">
+        <a href="index.html" class="brand">Digitalnext</a>
+        <nav class="main-nav">
+          <ul class="nav-list">
+            <li><a href="cat-accion.html">Acción</a></li>
+            <li><a href="cat-aventura.html">Aventura</a></li>
+            <li><a href="cat-fps.html">FPS</a></li>
+            <li><a href="cat-deportes.html" class="active">Deportes</a></li>
+            <li><a href="cat-rpg.html">RPG</a></li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <nav class="breadcrumb container">
+    <a href="index.html">Inicio</a>
+    <span>›</span>
+    <span>Deportes</span>
+  </nav>
+
+  <main class="container">
+    <header class="page-header">
+      <h1>Deportes</h1>
+      <p>Competencia, estrategia y superación — vive la emoción del deporte desde tu pantalla.</p>
+    </header>
+
+    <div class="game-grid">
+
+      <article class="game-card">
+        <img src="img/deportes-1.jpg" alt="EA Sports FC 25" />
+        <div class="game-body">
+          <h3>EA Sports FC 25</h3>
+          <p class="game-platform">PC · PS5 · Xbox · Switch</p>
+          <p class="game-desc">El fútbol más realista con licencias oficiales, modos carrera y ultimate team renovados.</p>
+          <div class="game-footer">
+            <span class="price">$34.990</span>
+            <a href="index.html" class="btn btn-outline">Volver al inicio</a>
+          </div>
+        </div>
+      </article>
+
+      <article class="game-card">
+        <img src="img/deportes-2.jpg" alt="NBA 2K25" />
+        <div class="game-body">
+          <h3>NBA 2K25</h3>
+          <p class="game-platform">PC · PS5 · Xbox</p>
+          <p class="game-desc">Baloncesto de alto nivel con el modo MyCareer más inmersivo hasta la fecha y gráficos de nueva generación.</p>
+          <div class="game-footer">
+            <span class="price">$32.990</span>
+            <a href="index.html" class="btn btn-outline">Volver al inicio</a>
+          </div>
+        </div>
+      </article>
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>© <span id="anio"></span> Digitalnext. Todos los derechos reservados.</p>
+    </div>
+  </footer>
+
+  <script>document.getElementById('anio').textContent = new Date().getFullYear();</script>
+</body>
+</html>

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Digitalnext — FPS</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="container">
+      <div class="header-inner">
+        <a href="index.html" class="brand">Digitalnext</a>
+        <nav class="main-nav">
+          <ul class="nav-list">
+            <li><a href="cat-accion.html">Acción</a></li>
+            <li><a href="cat-aventura.html">Aventura</a></li>
+            <li><a href="cat-fps.html" class="active">FPS</a></li>
+            <li><a href="cat-deportes.html">Deportes</a></li>
+            <li><a href="cat-rpg.html">RPG</a></li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <nav class="breadcrumb container">
+    <a href="index.html">Inicio</a>
+    <span>›</span>
+    <span>FPS</span>
+  </nav>
+
+  <main class="container">
+    <header class="page-header">
+      <h1>FPS</h1>
+      <p>Acción en primera persona donde la puntería y los reflejos marcan la diferencia.</p>
+    </header>
+
+    <div class="game-grid">
+
+      <article class="game-card">
+        <img src="img/fps-1.jpg" alt="Doom Eternal" />
+        <div class="game-body">
+          <h3>Doom Eternal</h3>
+          <p class="game-platform">PC · PS5 · Xbox · Switch</p>
+          <p class="game-desc">Elimina hordas de demonios a velocidad brutal en uno de los shooters más frenéticos de la historia.</p>
+          <div class="game-footer">
+            <span class="price">$24.990</span>
+            <a href="index.html" class="btn btn-outline">Volver al inicio</a>
+          </div>
+        </div>
+      </article>
+
+      <article class="game-card">
+        <img src="img/fps-2.jpg" alt="Halo Infinite" />
+        <div class="game-body">
+          <h3>Halo Infinite</h3>
+          <p class="game-platform">PC · Xbox</p>
+          <p class="game-desc">El Master Chief regresa en una aventura de mundo abierto con multijugador gratuito incluido.</p>
+          <div class="game-footer">
+            <span class="price">$29.990</span>
+            <a href="index.html" class="btn btn-outline">Volver al inicio</a>
+          </div>
+        </div>
+      </article>
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>© <span id="anio"></span> Digitalnext. Todos los derechos reservados.</p>
+    </div>
+  </footer>
+
+  <script>document.getElementById('anio').textContent = new Date().getFullYear();</script>
+</body>
+</html>

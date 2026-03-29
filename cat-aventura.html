@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Digitalnext — Aventura</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="container">
+      <div class="header-inner">
+        <a href="index.html" class="brand">Digitalnext</a>
+        <nav class="main-nav">
+          <ul class="nav-list">
+            <li><a href="cat-accion.html">Acción</a></li>
+            <li><a href="cat-aventura.html" class="active">Aventura</a></li>
+            <li><a href="cat-fps.html">FPS</a></li>
+            <li><a href="cat-deportes.html">Deportes</a></li>
+            <li><a href="cat-rpg.html">RPG</a></li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <nav class="breadcrumb container">
+    <a href="index.html">Inicio</a>
+    <span>›</span>
+    <span>Aventura</span>
+  </nav>
+
+  <main class="container">
+    <header class="page-header">
+      <h1>Aventura</h1>
+      <p>Historias profundas y mundos enormes para explorar a tu propio ritmo.</p>
+    </header>
+
+    <div class="game-grid">
+
+      <article class="game-card">
+        <img src="img/aventura-1.jpg" alt="The Legend of Zelda: Tears of the Kingdom" />
+        <div class="game-body">
+          <h3>Zelda: Tears of the Kingdom</h3>
+          <p class="game-platform">Nintendo Switch</p>
+          <p class="game-desc">Explora Hyrule con libertad total, construye mecanismos y descubre los secretos del cielo y las profundidades.</p>
+          <div class="game-footer">
+            <span class="price">$39.990</span>
+            <a href="index.html" class="btn btn-outline">Volver al inicio</a>
+          </div>
+        </div>
+      </article>
+
+      <article class="game-card">
+        <img src="img/aventura-2.jpg" alt="Hollow Knight" />
+        <div class="game-body">
+          <h3>Hollow Knight</h3>
+          <p class="game-platform">PC · PS4 · Xbox · Switch</p>
+          <p class="game-desc">Metroidvania oscuro y desafiante ambientado en un reino de insectos subterráneo lleno de secretos.</p>
+          <div class="game-footer">
+            <span class="price">$9.990</span>
+            <a href="index.html" class="btn btn-outline">Volver al inicio</a>
+          </div>
+        </div>
+      </article>
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>© <span id="anio"></span> Digitalnext. Todos los derechos reservados.</p>
+    </div>
+  </footer>
+
+  <script>document.getElementById('anio').textContent = new Date().getFullYear();</script>
+</body>
+</html>

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Digitalnext — RPG</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="container">
+      <div class="header-inner">
+        <a href="index.html" class="brand">Digitalnext</a>
+        <nav class="main-nav">
+          <ul class="nav-list">
+            <li><a href="cat-accion.html">Acción</a></li>
+            <li><a href="cat-aventura.html">Aventura</a></li>
+            <li><a href="cat-fps.html">FPS</a></li>
+            <li><a href="cat-deportes.html">Deportes</a></li>
+            <li><a href="cat-rpg.html" class="active">RPG</a></li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <nav class="breadcrumb container">
+    <a href="index.html">Inicio</a>
+    <span>›</span>
+    <span>RPG</span>
+  </nav>
+
+  <main class="container">
+    <header class="page-header">
+      <h1>RPG</h1>
+      <p>Crea tu personaje, toma decisiones y construye tu propia historia en mundos épicos.</p>
+    </header>
+
+    <div class="game-grid">
+
+      <article class="game-card">
+        <img src="img/rpg-1.jpg" alt="Elden Ring" />
+        <div class="game-body">
+          <h3>Elden Ring</h3>
+          <p class="game-platform">PC · PS5 · Xbox</p>
+          <p class="game-desc">Un RPG de mundo abierto oscuro y desafiante creado por FromSoftware y George R.R. Martin.</p>
+          <div class="game-footer">
+            <span class="price">$39.990</span>
+            <a href="index.html" class="btn btn-outline">Volver al inicio</a>
+          </div>
+        </div>
+      </article>
+
+      <article class="game-card">
+        <img src="img/rpg-2.jpg" alt="Baldur's Gate 3" />
+        <div class="game-body">
+          <h3>Baldur's Gate 3</h3>
+          <p class="game-platform">PC · PS5</p>
+          <p class="game-desc">RPG por turnos basado en D&D con una narrativa profunda, decisiones impactantes y cooperativo para 4 jugadores.</p>
+          <div class="game-footer">
+            <span class="price">$44.990</span>
+            <a href="index.html" class="btn btn-outline">Volver al inicio</a>
+          </div>
+        </div>
+      </article>
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>© <span id="anio"></span> Digitalnext. Todos los derechos reservados.</p>
+    </div>
+  </footer>
+
+  <script>document.getElementById('anio').textContent = new Date().getFullYear();</script>
+</body>
+</html>

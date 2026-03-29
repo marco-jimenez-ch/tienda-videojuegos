@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Digitalnext — Catálogo de Videojuegos</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+
+  <!-- ENCABEZADO -->
+  <header class="site-header">
+    <div class="container">
+      <div class="header-inner">
+        <a href="index.html" class="brand">Digitalnext</a>
+        <nav class="main-nav">
+          <ul class="nav-list">
+            <li><a href="cat-accion.html">Acción</a></li>
+            <li><a href="cat-aventura.html">Aventura</a></li>
+            <li><a href="cat-fps.html">FPS</a></li>
+            <li><a href="cat-deportes.html">Deportes</a></li>
+            <li><a href="cat-rpg.html">RPG</a></li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="container">
+      <h1>Bienvenido a Digitalnext</h1>
+      <p>Explora nuestro catálogo de videojuegos y encuentra tu próxima aventura.</p>
+    </div>
+  </section>
+
+  <!-- CATEGORÍAS -->
+  <main class="container">
+    <section class="categories">
+      <h2>Categorías</h2>
+      <div class="cat-grid">
+
+        <a href="cat-accion.html" class="cat-card">
+          <img src="img/home-accion.jpg" alt="Categoría Acción" />
+          <h3>Acción</h3>
+        </a>
+
+        <a href="cat-aventura.html" class="cat-card">
+          <img src="img/home-aventura.jpg" alt="Categoría Aventura" />
+          <h3>Aventura</h3>
+        </a>
+
+        <a href="cat-fps.html" class="cat-card">
+          <img src="img/home-fps.jpg" alt="Categoría FPS" />
+          <h3>FPS</h3>
+        </a>
+
+        <a href="cat-deportes.html" class="cat-card">
+          <img src="img/home-deportes.jpg" alt="Categoría Deportes" />
+          <h3>Deportes</h3>
+        </a>
+
+        <a href="cat-rpg.html" class="cat-card">
+          <img src="img/home-rpg.jpg" alt="Categoría RPG" />
+          <h3>RPG</h3>
+        </a>
+
+      </div>
+    </section>
+  </main>
+
+  <!-- PIE DE PÁGINA -->
+  <footer class="site-footer">
+    <div class="container">
+      <p>© <span id="anio"></span> Digitalnext. Todos los derechos reservados.</p>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById('anio').textContent = new Date().getFullYear();
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,166 @@
+/* =============================================
+   VARIABLES Y RESET
+   ============================================= */
+:root {
+  --brand-900: #0F172A;
+  --brand-700: #102A56;
+  --brand-500: #1E90FF;
+  --brand-300: #7CC4FF;
+  --accent:    #00C2FF;
+  --bg:        #0B1220;
+  --surface:   #0F1629;
+  --text:      #E6EEF9;
+  --muted:     #9CB3D7;
+  --line:      #24324D;
+  --radius:    16px;
+  --shadow:    0 10px 24px rgba(0, 0, 0, 0.25);
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  font-family: system-ui, -apple-system, Arial, sans-serif;
+  background-color: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+}
+
+/* =============================================
+   UTILIDADES
+   ============================================= */
+.container {
+  width: min(1120px, 92%);
+  margin-inline: auto;
+}
+
+/* =============================================
+   HEADER
+   ============================================= */
+.site-header {
+  background-color: var(--brand-900);
+  border-bottom: 1px solid var(--line);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 0;
+}
+
+.brand {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #fff;
+  text-decoration: none;
+  letter-spacing: 0.5px;
+}
+
+.nav-list {
+  list-style: none;
+  display: flex;
+  gap: 8px;
+}
+
+.nav-list a {
+  color: var(--text);
+  text-decoration: none;
+  padding: 8px 12px;
+  border-radius: 10px;
+  transition: background 0.2s;
+}
+
+.nav-list a:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+/* =============================================
+   HERO
+   ============================================= */
+.hero {
+  background: linear-gradient(135deg, var(--brand-900), var(--brand-700));
+  border-bottom: 1px solid var(--line);
+  padding: 60px 0;
+  text-align: center;
+}
+
+.hero h1 {
+  font-size: clamp(28px, 5vw, 48px);
+  margin-bottom: 12px;
+}
+
+.hero p {
+  color: var(--muted);
+  font-size: 1.1rem;
+}
+
+/* =============================================
+   CATEGORÍAS
+   ============================================= */
+.categories {
+  padding: 40px 0;
+}
+
+.categories h2 {
+  font-size: 1.6rem;
+  margin-bottom: 24px;
+  color: var(--text);
+}
+
+.cat-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 20px;
+}
+
+.cat-card {
+  background-color: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  overflow: hidden;
+  text-decoration: none;
+  color: var(--text);
+  transition: transform 0.18s ease, border-color 0.18s ease;
+  display: block;
+}
+
+.cat-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--brand-500);
+}
+
+.cat-card img {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  display: block;
+  background-color: var(--brand-700);
+}
+
+.cat-card h3 {
+  padding: 12px 14px;
+  font-size: 1rem;
+}
+
+/* =============================================
+   FOOTER
+   ============================================= */
+.site-footer {
+  border-top: 1px solid var(--line);
+  margin-top: 40px;
+  padding: 20px 0;
+  text-align: center;
+  color: var(--muted);
+  font-size: 0.9rem;
+}

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Digitalnext — Acción</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="container">
+      <div class="header-inner">
+        <a href="index.html" class="brand">Digitalnext</a>
+        <nav class="main-nav">
+          <ul class="nav-list">
+            <li><a href="cat-accion.html" class="active">Acción</a></li>
+            <li><a href="cat-aventura.html">Aventura</a></li>
+            <li><a href="cat-fps.html">FPS</a></li>
+            <li><a href="cat-deportes.html">Deportes</a></li>
+            <li><a href="cat-rpg.html">RPG</a></li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <nav class="breadcrumb container">
+    <a href="index.html">Inicio</a>
+    <span>›</span>
+    <span>Acción</span>
+  </nav>
+
+  <main class="container">
+    <header class="page-header">
+      <h1>Acción</h1>
+      <p>Adrenalina y reflejos rápidos — combates intensos que te mantienen al borde del asiento.</p>
+    </header>
+
+    <div class="game-grid">
+
+      <article class="game-card">
+        <img src="img/accion-1.jpg" alt="Devil May Cry 5" />
+        <div class="game-body">
+          <h3>Devil May Cry 5</h3>
+          <p class="game-platform">PC · PS5 · Xbox</p>
+          <p class="game-desc">Hack and slash frenético con combos espectaculares y protagonistas carismáticos.</p>
+          <div class="game-footer">
+            <span class="price">$19.990</span>
+            <a href="index.html" class="btn btn-outline">Volver al inicio</a>
+          </div>
+        </div>
+      </article>
+
+      <article class="game-card">
+        <img src="img/accion-2.jpg" alt="Bayonetta 3" />
+        <div class="game-body">
+          <h3>Bayonetta 3</h3>
+          <p class="game-platform">Nintendo Switch</p>
+          <p class="game-desc">Acción exagerada, poderes mágicos y enemigos gigantes en un combate dinámico y espectacular.</p>
+          <div class="game-footer">
+            <span class="price">$22.990</span>
+            <a href="index.html" class="btn btn-outline">Volver al inicio</a>
+          </div>
+        </div>
+      </article>
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>© <span id="anio"></span> Digitalnext. Todos los derechos reservados.</p>
+    </div>
+  </footer>
+
+  <script>document.getElementById('anio').textContent = new Date().getFullYear();</script>
+</body>
+</html>
