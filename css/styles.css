@@ -67,10 +67,20 @@ body {
   letter-spacing: 0.5px;
 }
 
+/* =============================================
+   NAVEGACIÓN
+   ============================================= */
+.main-nav {
+  display: flex;
+  align-items: center;
+}
+
 .nav-list {
   list-style: none;
   display: flex;
   gap: 8px;
+  margin: 0;
+  padding: 0;
 }
 
 .nav-list a {
@@ -79,10 +89,81 @@ body {
   padding: 8px 12px;
   border-radius: 10px;
   transition: background 0.2s;
+  display: block;
 }
 
 .nav-list a:hover {
   background: rgba(255, 255, 255, 0.08);
+}
+
+.nav-list a.active {
+  color: var(--brand-300);
+  background: rgba(124, 196, 255, 0.08);
+}
+
+/* Toggler Bootstrap override */
+.navbar-toggler {
+  display: none;
+  background: transparent;
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--brand-300);
+  cursor: pointer;
+}
+
+.navbar-toggler-icon {
+  display: block;
+  width: 22px;
+  height: 22px;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28124,196,255,1%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+/* En desktop: menú siempre visible */
+@media (min-width: 769px) {
+  .navbar-toggler {
+    display: none;
+  }
+
+  .navbar-collapse {
+    display: flex !important;
+    align-items: center;
+  }
+}
+
+/* En móvil: toggler visible y menú desplegable */
+@media (max-width: 768px) {
+  .navbar-toggler {
+    display: block;
+  }
+
+  .navbar-collapse {
+    position: absolute;
+    top: 60px;
+    right: 0;
+    left: 0;
+    background-color: var(--brand-900);
+    border-bottom: 1px solid var(--line);
+    z-index: 100;
+    padding: 8px 0;
+  }
+
+  .nav-list {
+    flex-direction: column;
+    gap: 0;
+    padding: 0 16px;
+  }
+
+  .nav-list a {
+    padding: 12px 8px;
+    border-radius: 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .nav-list li:last-child a {
+    border-bottom: none;
+  }
 }
 
 /* =============================================
@@ -118,12 +199,6 @@ body {
   color: var(--text);
 }
 
-.cat-grid {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 20px;
-}
-
 .cat-card {
   background-color: var(--surface);
   border: 1px solid var(--line);
@@ -138,6 +213,7 @@ body {
 .cat-card:hover {
   transform: translateY(-4px);
   border-color: var(--brand-500);
+  color: var(--text);
 }
 
 .cat-card img {
@@ -151,6 +227,183 @@ body {
 .cat-card h3 {
   padding: 12px 14px;
   font-size: 1rem;
+  margin: 0;
+}
+
+/* =============================================
+   BREADCRUMB
+   ============================================= */
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 0;
+  color: var(--muted);
+  font-size: 0.9rem;
+  background: transparent;
+}
+
+.breadcrumb a {
+  color: var(--brand-300);
+  text-decoration: none;
+}
+
+.breadcrumb a:hover {
+  text-decoration: underline;
+}
+
+/* =============================================
+   PÁGINA DE CATEGORÍA
+   ============================================= */
+.page-header {
+  padding: 30px 0 20px;
+}
+
+.page-header h1 {
+  font-size: 2rem;
+  margin-bottom: 8px;
+}
+
+.page-header p {
+  color: var(--muted);
+}
+
+/* =============================================
+   FICHAS DE JUEGO
+   ============================================= */
+.game-card {
+  background-color: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  transition: transform 0.18s ease, border-color 0.18s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.game-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--brand-500);
+}
+
+.game-card img {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  display: block;
+  background-color: var(--brand-700);
+}
+
+.game-body {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.game-body h3 {
+  font-size: 1.1rem;
+  margin-bottom: 4px;
+}
+
+.game-platform {
+  color: var(--brand-300);
+  font-size: 0.8rem;
+  margin-bottom: 8px;
+}
+
+.game-desc {
+  color: var(--muted);
+  font-size: 0.92rem;
+  margin-bottom: 14px;
+  flex: 1;
+}
+
+.game-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: auto;
+}
+
+.price {
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: var(--text);
+}
+
+/* =============================================
+   BOTONES
+   ============================================= */
+.btn {
+  display: inline-block;
+  padding: 8px 14px;
+  border-radius: 10px;
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: background 0.2s;
+  border: 1px solid transparent;
+}
+
+.btn-outline {
+  border-color: var(--line);
+  color: var(--text);
+  background: transparent;
+}
+
+.btn-outline:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text);
+}
+
+.btn-primary {
+  background: linear-gradient(90deg, var(--brand-500), var(--accent));
+  color: #001329;
+  font-weight: 700;
+}
+
+.btn-primary:hover {
+  filter: brightness(1.08);
+  color: #001329;
+}
+
+/* =============================================
+   FORMULARIO (Bootstrap overrides)
+   ============================================= */
+.form-control {
+  background-color: var(--surface);
+  border: 1px solid var(--line);
+  color: var(--text);
+  border-radius: 10px;
+}
+
+.form-control:focus {
+  background-color: var(--surface);
+  border-color: var(--brand-500);
+  color: var(--text);
+  box-shadow: 0 0 0 3px rgba(30, 144, 255, 0.2);
+}
+
+.form-control::placeholder {
+  color: var(--muted);
+}
+
+.form-label {
+  color: var(--text);
+  font-size: 0.9rem;
+  margin-bottom: 6px;
+}
+
+.form-text {
+  color: var(--muted);
+  font-size: 0.78rem;
+}
+
+.form-card {
+  background-color: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
 }
 
 /* =============================================
