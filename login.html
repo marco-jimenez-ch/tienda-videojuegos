@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Digitalnext — Iniciar Sesión</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="container">
+      <div class="header-inner">
+        <a href="index.html" class="brand">Digitalnext</a>
+        <nav class="main-nav">
+          <button class="navbar-toggler" type="button"
+                  data-bs-toggle="collapse"
+                  data-bs-target="#navMenu"
+                  aria-controls="navMenu"
+                  aria-expanded="false"
+                  aria-label="Abrir menú">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navMenu">
+            <ul class="nav-list">
+              <li><a href="cat-accion.html">Acción</a></li>
+              <li><a href="cat-aventura.html">Aventura</a></li>
+              <li><a href="cat-fps.html">FPS</a></li>
+              <li><a href="cat-deportes.html">Deportes</a></li>
+              <li><a href="cat-rpg.html">RPG</a></li>
+              <li><a href="registro.html">Registro</a></li>
+              <li><a href="login.html" class="active">Iniciar Sesión</a></li>
+            </ul>
+          </div>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <nav class="breadcrumb container">
+    <a href="index.html">Inicio</a>
+    <span>›</span>
+    <span>Iniciar Sesión</span>
+  </nav>
+
+  <main class="container">
+    <header class="page-header">
+      <h1>Iniciar Sesión</h1>
+      <p>Ingresa tus credenciales para acceder a tu cuenta.</p>
+    </header>
+
+    <div class="row justify-content-center mb-5">
+      <div class="col-12 col-md-8 col-lg-5">
+        <div class="form-card">
+          <div class="card-body p-4">
+
+            <form id="formLogin" novalidate>
+              <div class="row g-3">
+
+                <!-- Email -->
+                <div class="col-12">
+                  <label for="loginEmail" class="form-label">Correo electrónico *</label>
+                  <input type="email"
+                         id="loginEmail"
+                         name="loginEmail"
+                         class="form-control"
+                         placeholder="Ej: juan@correo.com" />
+                </div>
+
+                <!-- Contraseña -->
+                <div class="col-12">
+                  <label for="loginPassword" class="form-label">Contraseña *</label>
+                  <div class="input-group">
+                    <input type="password"
+                           id="loginPassword"
+                           name="loginPassword"
+                           class="form-control" />
+                    <button class="btn btn-outline" type="button" id="toggleLoginPass">Mostrar</button>
+                  </div>
+                </div>
+
+                <!-- Rol (simulado) -->
+                <div class="col-12">
+                  <label for="rol" class="form-label">Tipo de usuario *</label>
+                  <select id="rol" name="rol" class="form-control">
+                    <option value="">-- Selecciona tu rol --</option>
+                    <option value="cliente">Cliente</option>
+                    <option value="admin">Administrador</option>
+                  </select>
+                  <div class="form-text">Selecciona el rol con el que deseas ingresar.</div>
+                </div>
+
+              </div>
+
+              <!-- Botones -->
+              <div class="d-flex gap-2 mt-4">
+                <button type="submit" class="btn btn-primary">Ingresar</button>
+                <button type="reset" class="btn btn-outline">Limpiar</button>
+              </div>
+
+              <!-- Enlaces -->
+              <div class="d-flex gap-3 mt-3">
+                <a href="recuperar.html" class="form-text" style="color: var(--brand-300);">¿Olvidaste tu contraseña?</a>
+                <a href="registro.html" class="form-text" style="color: var(--brand-300);">¿No tienes cuenta? Regístrate</a>
+              </div>
+
+            </form>
+
+          </div>
+        </div>
+
+        <!-- Panel simulado de roles -->
+        <div id="panelCliente" class="role-panel mt-4" style="display:none;">
+          <div class="form-card">
+            <div class="card-body p-4">
+              <h3>👤 Panel Cliente</h3>
+              <p class="game-platform">Bienvenido. Desde aquí puedes ver tus compras y modificar tu perfil.</p>
+              <div class="d-flex gap-2 mt-3">
+                <a href="perfil.html" class="btn btn-primary">Mi Perfil</a>
+                <a href="index.html" class="btn btn-outline">Ver Catálogo</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="panelAdmin" class="role-panel mt-4" style="display:none;">
+          <div class="form-card">
+            <div class="card-body p-4">
+              <h3>🛠️ Panel Administrador</h3>
+              <p class="game-platform">Bienvenido. Desde aquí puedes gestionar el catálogo y los usuarios.</p>
+              <div class="d-flex gap-2 mt-3">
+                <a href="perfil.html" class="btn btn-primary">Mi Perfil</a>
+                <a href="index.html" class="btn btn-outline">Ver Catálogo</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>© <span id="anio"></span> Digitalnext. Todos los derechos reservados.</p>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
+  <script>
+    document.getElementById('anio').textContent = new Date().getFullYear();
+
+    // Toggle mostrar/ocultar contraseña
+    document.getElementById('toggleLoginPass').addEventListener('click', function () {
+      const pwd = document.getElementById('loginPassword');
+      const isPassword = pwd.getAttribute('type') === 'password';
+      pwd.setAttribute('type', isPassword ? 'text' : 'password');
+      this.textContent = isPassword ? 'Ocultar' : 'Mostrar';
+    });
+
+    // Validación del formulario de login
+    $(function () {
+      $('#formLogin').validate({
+        errorClass:   'is-invalid',
+        validClass:   'is-valid',
+        errorElement: 'div',
+
+        errorPlacement: function (error, element) {
+          error.addClass('invalid-feedback');
+          if (element.parent('.input-group').length) {
+            error.insertAfter(element.parent());
+          } else {
+            error.insertAfter(element);
+          }
+        },
+
+        highlight: function (element) {
+          $(element).addClass('is-invalid').removeClass('is-valid');
+        },
+
+        unhighlight: function (element) {
+          $(element).removeClass('is-invalid').addClass('is-valid');
+        },
+
+        rules: {
+          loginEmail:    { required: true, email: true },
+          loginPassword: { required: true },
+          rol:           { required: true }
+        },
+
+        messages: {
+          loginEmail: {
+            required: 'El correo es obligatorio.',
+            email:    'Ingresa un correo válido.'
+          },
+          loginPassword: {
+            required: 'La contraseña es obligatoria.'
+          },
+          rol: {
+            required: 'Selecciona un tipo de usuario.'
+          }
+        },
+
+        // Simula el login mostrando el panel según el rol
+        submitHandler: function (form, event) {
+          event.preventDefault();
+          const rolSeleccionado = $('#rol').val();
+
+          // Oculta todos los paneles primero
+          $('.role-panel').hide();
+
+          // Muestra el panel según el rol
+          if (rolSeleccionado === 'cliente') {
+            $('#panelCliente').show();
+          } else if (rolSeleccionado === 'admin') {
+            $('#panelAdmin').show();
+          }
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>
