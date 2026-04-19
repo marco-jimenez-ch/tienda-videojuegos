@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Digitalnext — Panel Administrador</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'core/css/styles.css' %}" />
+  <style>
+    .admin-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 16px;
+      font-size: 0.85rem;
+    }
+    .admin-table th {
+      color: var(--brand-300);
+      border-bottom: 1px solid var(--surface-2, #2a2a3a);
+      padding: 8px 10px;
+      text-align: left;
+      font-weight: 600;
+    }
+    .admin-table td {
+      color: var(--muted);
+      border-bottom: 1px solid var(--surface-2, #1e1e2e);
+      padding: 8px 10px;
+    }
+    .admin-table tr:last-child td {
+      border-bottom: none;
+    }
+  </style>
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="container">
+      <div class="header-inner">
+        <a href="/" class="brand">Digitalnext</a>
+        <nav class="main-nav">
+          <button class="navbar-toggler" type="button"
+                  data-bs-toggle="collapse"
+                  data-bs-target="#navMenu"
+                  aria-controls="navMenu"
+                  aria-expanded="false"
+                  aria-label="Abrir menú">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navMenu">
+            <ul class="nav-list">
+              <li><a href="/admin-panel/" class="active">Panel Admin</a></li>
+              <li><a href="/perfil/">Mi Perfil</a></li>
+              <li><a href="/login/">Cerrar Sesión</a></li>
+            </ul>
+          </div>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <nav class="breadcrumb container">
+    <a href="/">Inicio</a>
+    <span>›</span>
+    <span>Panel Administrador</span>
+  </nav>
+
+  <main class="container">
+    <header class="page-header">
+      <h1>Panel Administrador</h1>
+      <p>Gestiona los recursos de la aplicación desde este panel.</p>
+    </header>
+
+    <div class="row g-4">
+
+      <!-- Gestión de productos -->
+      <div class="col-12 col-md-6 col-lg-4">
+        <div class="form-card h-100">
+          <div class="card-body p-4">
+            <h3>Gestión de Productos</h3>
+            <p class="game-platform">Administra el catálogo de videojuegos disponibles en la tienda.</p>
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Producto</th>
+                  <th>Precio</th>
+                  <th>Stock</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Devil May Cry 5</td>
+                  <td>$19.990</td>
+                  <td>12</td>
+                </tr>
+                <tr>
+                  <td>Bayonetta 3</td>
+                  <td>$22.990</td>
+                  <td>8</td>
+                </tr>
+                <tr>
+                  <td>FIFA 24</td>
+                  <td>$29.990</td>
+                  <td>20</td>
+                </tr>
+              </tbody>
+            </table>
+            <div class="d-flex gap-2 mt-3">
+              <button class="btn btn-primary" disabled>Agregar</button>
+              <button class="btn btn-outline" disabled>Editar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Gestión de usuarios -->
+      <div class="col-12 col-md-6 col-lg-4">
+        <div class="form-card h-100">
+          <div class="card-body p-4">
+            <h3>Gestión de Usuarios</h3>
+            <p class="game-platform">Visualiza y administra los usuarios registrados en la plataforma.</p>
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Usuario</th>
+                  <th>Rol</th>
+                  <th>Estado</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>juanp99</td>
+                  <td>Cliente</td>
+                  <td>Activo</td>
+                </tr>
+                <tr>
+                  <td>maria22</td>
+                  <td>Cliente</td>
+                  <td>Activo</td>
+                </tr>
+                <tr>
+                  <td>admin01</td>
+                  <td>Admin</td>
+                  <td>Activo</td>
+                </tr>
+              </tbody>
+            </table>
+            <div class="d-flex gap-2 mt-3">
+              <button class="btn btn-primary" disabled>Agregar</button>
+              <button class="btn btn-outline" disabled>Editar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Monitoreo de compras -->
+      <div class="col-12 col-md-6 col-lg-4">
+        <div class="form-card h-100">
+          <div class="card-body p-4">
+            <h3>Monitoreo de Compras</h3>
+            <p class="game-platform">Revisa el historial de compras realizadas en la tienda.</p>
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Orden</th>
+                  <th>Usuario</th>
+                  <th>Total</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>#001</td>
+                  <td>juanp99</td>
+                  <td>$45.970</td>
+                </tr>
+                <tr>
+                  <td>#002</td>
+                  <td>maria22</td>
+                  <td>$29.990</td>
+                </tr>
+                <tr>
+                  <td>#003</td>
+                  <td>juanp99</td>
+                  <td>$22.990</td>
+                </tr>
+              </tbody>
+            </table>
+            <div class="d-flex gap-2 mt-3">
+              <button class="btn btn-outline" disabled>Ver detalle</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>© <span id="anio"></span> Digitalnext. Todos los derechos reservados.</p>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    document.getElementById('anio').textContent = new Date().getFullYear();
+  </script>
+
+</body>
+</html>
