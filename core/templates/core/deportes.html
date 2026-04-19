@@ -32,6 +32,7 @@
               <li><a href="/rpg/">RPG</a></li>
               {% if user.is_authenticated %}
                 <li><a href="/perfil/">Mi Perfil</a></li>
+                <li><a href="/carrito/">Carrito</a></li>
                 <li><a href="/logout/">Cerrar Sesión</a></li>
               {% else %}
                 <li><a href="/registro/">Registro</a></li>
@@ -57,37 +58,24 @@
     </header>
 
     <div class="row g-4">
-
+      {% for producto in productos %}
       <div class="col-12 col-md-6">
         <article class="game-card h-100">
-          <img src="{% static 'core/img/deportes-1.jpg' %}" alt="EA Sports FC 25" />
+          <img src="{% static 'core/img/' %}{{ producto.imagen }}" alt="{{ producto.nombre }}" />
           <div class="game-body">
-            <h3>EA Sports FC 26</h3>
-            <p class="game-platform">PC · PS5 · Xbox · Switch</p>
-            <p class="game-desc">El fútbol más realista con licencias oficiales, modos carrera y ultimate team renovados.</p>
+            <h3>{{ producto.nombre }}</h3>
+            <p class="game-platform">{{ producto.plataforma }}</p>
+            <p class="game-desc">{{ producto.descripcion }}</p>
             <div class="game-footer">
-              <span class="price">$34.990</span>
-              <a href="/" class="btn btn-outline">Volver al inicio</a>
+              <span class="price">${{ producto.precio }}</span>
+              <a href="/ficha-producto/{{ producto.id }}/" class="btn btn-outline">Ver detalle</a>
             </div>
           </div>
         </article>
       </div>
-
-      <div class="col-12 col-md-6">
-        <article class="game-card h-100">
-          <img src="{% static 'core/img/deportes-2.jpg' %}" alt="NBA 2K25" />
-          <div class="game-body">
-            <h3>NBA 2K26</h3>
-            <p class="game-platform">PC · PS5 · Xbox</p>
-            <p class="game-desc">Baloncesto de alto nivel con el modo MyCareer más inmersivo hasta la fecha y gráficos de nueva generación.</p>
-            <div class="game-footer">
-              <span class="price">$32.990</span>
-              <a href="/" class="btn btn-outline">Volver al inicio</a>
-            </div>
-          </div>
-        </article>
-      </div>
-
+      {% empty %}
+        <p>No hay productos disponibles en esta categoría.</p>
+      {% endfor %}
     </div>
   </main>
 

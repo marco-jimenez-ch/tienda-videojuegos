@@ -32,6 +32,7 @@
               <li><a href="/rpg/" class="active">RPG</a></li>
               {% if user.is_authenticated %}
                 <li><a href="/perfil/">Mi Perfil</a></li>
+                <li><a href="/carrito/">Carrito</a></li>
                 <li><a href="/logout/">Cerrar Sesión</a></li>
               {% else %}
                 <li><a href="/registro/">Registro</a></li>
@@ -57,37 +58,24 @@
     </header>
 
     <div class="row g-4">
-
+      {% for producto in productos %}
       <div class="col-12 col-md-6">
         <article class="game-card h-100">
-          <img src="{% static 'core/img/rpg-1.jpg' %}" alt="Elden Ring" />
+          <img src="{% static 'core/img/' %}{{ producto.imagen }}" alt="{{ producto.nombre }}" />
           <div class="game-body">
-            <h3>Elden Ring</h3>
-            <p class="game-platform">PC · PS5 · Xbox</p>
-            <p class="game-desc">Un RPG de mundo abierto oscuro y desafiante creado por FromSoftware y George R.R. Martin.</p>
+            <h3>{{ producto.nombre }}</h3>
+            <p class="game-platform">{{ producto.plataforma }}</p>
+            <p class="game-desc">{{ producto.descripcion }}</p>
             <div class="game-footer">
-              <span class="price">$39.990</span>
-              <a href="/" class="btn btn-outline">Volver al inicio</a>
+              <span class="price">${{ producto.precio }}</span>
+              <a href="/ficha-producto/{{ producto.id }}/" class="btn btn-outline">Ver detalle</a>
             </div>
           </div>
         </article>
       </div>
-
-      <div class="col-12 col-md-6">
-        <article class="game-card h-100">
-          <img src="{% static 'core/img/rpg-2.jpg' %}" alt="Baldur's Gate 3" />
-          <div class="game-body">
-            <h3>Baldur's Gate 3</h3>
-            <p class="game-platform">PC · PS5</p>
-            <p class="game-desc">RPG por turnos basado en D&D con narrativa profunda, decisiones impactantes y cooperativo para 4 jugadores.</p>
-            <div class="game-footer">
-              <span class="price">$44.990</span>
-              <a href="/" class="btn btn-outline">Volver al inicio</a>
-            </div>
-          </div>
-        </article>
-      </div>
-
+      {% empty %}
+        <p>No hay productos disponibles en esta categoría.</p>
+      {% endfor %}
     </div>
   </main>
 

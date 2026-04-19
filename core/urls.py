@@ -14,7 +14,7 @@ urlpatterns = [
     path('fps/', views.fps, name='fps'),
     path('deportes/', views.deportes, name='deportes'),
     path('rpg/', views.rpg, name='rpg'),
-    path('ficha-producto/', views.ficha_producto, name='ficha_producto'),
+    path('ficha-producto/<int:producto_id>/', views.ficha_producto, name='ficha_producto'),
     path('carrito/', views.carrito, name='carrito'),
     path('checkout/', views.checkout, name='checkout'),
 ]

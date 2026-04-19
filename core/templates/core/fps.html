@@ -32,6 +32,7 @@
               <li><a href="/rpg/">RPG</a></li>
               {% if user.is_authenticated %}
                 <li><a href="/perfil/">Mi Perfil</a></li>
+                <li><a href="/carrito/">Carrito</a></li>
                 <li><a href="/logout/">Cerrar Sesión</a></li>
               {% else %}
                 <li><a href="/registro/">Registro</a></li>
@@ -57,37 +58,24 @@
     </header>
 
     <div class="row g-4">
-
+      {% for producto in productos %}
       <div class="col-12 col-md-6">
         <article class="game-card h-100">
-          <img src="{% static 'core/img/fps-1.jpg' %}" alt="Doom Eternal" />
+          <img src="{% static 'core/img/' %}{{ producto.imagen }}" alt="{{ producto.nombre }}" />
           <div class="game-body">
-            <h3>Doom Eternal</h3>
-            <p class="game-platform">PC · PS5 · Xbox · Switch</p>
-            <p class="game-desc">Elimina hordas de demonios a velocidad brutal en uno de los shooters más frenéticos de la historia.</p>
+            <h3>{{ producto.nombre }}</h3>
+            <p class="game-platform">{{ producto.plataforma }}</p>
+            <p class="game-desc">{{ producto.descripcion }}</p>
             <div class="game-footer">
-              <span class="price">$24.990</span>
-              <a href="/" class="btn btn-outline">Volver al inicio</a>
+              <span class="price">${{ producto.precio }}</span>
+              <a href="/ficha-producto/{{ producto.id }}/" class="btn btn-outline">Ver detalle</a>
             </div>
           </div>
         </article>
       </div>
-
-      <div class="col-12 col-md-6">
-        <article class="game-card h-100">
-          <img src="{% static 'core/img/fps-2.jpg' %}" alt="Halo Infinite" />
-          <div class="game-body">
-            <h3>Halo Infinite</h3>
-            <p class="game-platform">PC · Xbox</p>
-            <p class="game-desc">El Master Chief regresa en una aventura de mundo abierto con multijugador gratuito incluido.</p>
-            <div class="game-footer">
-              <span class="price">$29.990</span>
-              <a href="/" class="btn btn-outline">Volver al inicio</a>
-            </div>
-          </div>
-        </article>
-      </div>
-
+      {% empty %}
+        <p>No hay productos disponibles en esta categoría.</p>
+      {% endfor %}
     </div>
   </main>
 

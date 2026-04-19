@@ -1,9 +1,9 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.contrib.auth.models import User
-from .models import Perfil, Rol
+from .models import Perfil, Rol, Producto, Categoria, Carrito, DetalleCarrito
 
 
 # ─── AUTENTICACIÓN ────────────────────────────────────────────────────────────
@@ -114,22 +114,29 @@ def index(request):
     return render(request, 'core/index.html')
 
 def accion(request):
-    return render(request, 'core/accion.html')
+    productos = Producto.objects.filter(categoria__nombre='Acción', activo=True)
+    return render(request, 'core/accion.html', {'productos': productos})
 
 def aventura(request):
-    return render(request, 'core/aventura.html')
+    productos = Producto.objects.filter(categoria__nombre='Aventura', activo=True)
+    return render(request, 'core/aventura.html', {'productos': productos})
 
 def fps(request):
-    return render(request, 'core/fps.html')
+    productos = Producto.objects.filter(categoria__nombre='FPS', activo=True)
+    return render(request, 'core/fps.html', {'productos': productos})
 
 def deportes(request):
-    return render(request, 'core/deportes.html')
+    productos = Producto.objects.filter(categoria__nombre='Deportes', activo=True)
+    return render(request, 'core/deportes.html', {'productos': productos})
 
 def rpg(request):
-    return render(request, 'core/rpg.html')
+    productos = Producto.objects.filter(categoria__nombre='RPG', activo=True)
+    return render(request, 'core/rpg.html', {'productos': productos})
 
-def ficha_producto(request):
-    return render(request, 'core/ficha-producto.html')
+def ficha_producto(request, producto_id):
+    from django.shortcuts import get_object_or_404
+    producto = get_object_or_404(Producto, id=producto_id, activo=True)
+    return render(request, 'core/ficha-producto.html', {'producto': producto})
 
 
 # ─── PROTEGIDAS (Solo usuarios autenticados) ──────────────────────────────────
