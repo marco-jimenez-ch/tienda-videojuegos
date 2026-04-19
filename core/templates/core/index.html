@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -5,11 +6,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Digitalnext — Catálogo de Videojuegos</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="{% static 'core/css/styles.css' %}" />
 </head>
 <body>
 
-  <!-- ENCABEZADO -->
   <header class="site-header">
     <div class="container">
       <div class="header-inner">
@@ -25,13 +25,19 @@
           </button>
           <div class="collapse navbar-collapse" id="navMenu">
             <ul class="nav-list">
-              <li><a href="categorias/accion.html">Acción</a></li>
-              <li><a href="categorias/aventura.html">Aventura</a></li>
-              <li><a href="categorias/fps.html">FPS</a></li>
-              <li><a href="categorias/deportes.html">Deportes</a></li>
-              <li><a href="categorias/rpg.html">RPG</a></li>
-              <li><a href="auth/registro.html">Registro</a></li>
-              <li><a href="auth/login.html">Iniciar Sesión</a></li>
+              <li><a href="/accion/">Acción</a></li>
+              <li><a href="/aventura/">Aventura</a></li>
+              <li><a href="/fps/">FPS</a></li>
+              <li><a href="/deportes/">Deportes</a></li>
+              <li><a href="/rpg/">RPG</a></li>
+              {% if user.is_authenticated %}
+                <li><a href="/perfil/">Mi Perfil</a></li>
+                <li><a href="/carrito/">Carrito</a></li>
+                <li><a href="/logout/">Cerrar Sesión</a></li>
+              {% else %}
+                <li><a href="/registro/">Registro</a></li>
+                <li><a href="/login/">Iniciar Sesión</a></li>
+              {% endif %}
             </ul>
           </div>
         </nav>
@@ -39,52 +45,52 @@
     </div>
   </header>
 
-  <!-- HERO -->
   <section class="hero">
     <div class="container">
       <h1>Bienvenido a Digitalnext</h1>
       <p>Explora nuestro catálogo de videojuegos y encuentra tu próxima aventura.</p>
+      {% if user.is_authenticated %}
+        <p class="mt-2">Hola, <strong>{{ user.first_name|default:user.username }}</strong> 👾</p>
+      {% endif %}
     </div>
   </section>
 
-  <!-- CATEGORÍAS -->
   <main class="container">
     <section class="categories">
       <h2>Categorías</h2>
-
       <div class="row g-3">
 
         <div class="col-12 col-md-6 col-lg-4">
-          <a href="categorias/accion.html" class="cat-card h-100">
-            <img src="img/home-accion.jpg" alt="Categoría Acción" />
+          <a href="/accion/" class="cat-card h-100">
+            <img src="{% static 'core/img/home-accion.jpg' %}" alt="Categoría Acción" />
             <h3>Acción</h3>
           </a>
         </div>
 
         <div class="col-12 col-md-6 col-lg-4">
-          <a href="categorias/aventura.html" class="cat-card h-100">
-            <img src="img/home-aventura.jpg" alt="Categoría Aventura" />
+          <a href="/aventura/" class="cat-card h-100">
+            <img src="{% static 'core/img/home-aventura.jpg' %}" alt="Categoría Aventura" />
             <h3>Aventura</h3>
           </a>
         </div>
 
         <div class="col-12 col-md-6 col-lg-4">
-          <a href="categorias/fps.html" class="cat-card h-100">
-            <img src="img/home-fps.jpg" alt="Categoría FPS" />
+          <a href="/fps/" class="cat-card h-100">
+            <img src="{% static 'core/img/home-fps.jpg' %}" alt="Categoría FPS" />
             <h3>FPS</h3>
           </a>
         </div>
 
         <div class="col-12 col-md-6 col-lg-4">
-          <a href="categorias/deportes.html" class="cat-card h-100">
-            <img src="img/home-deportes.jpg" alt="Categoría Deportes" />
+          <a href="/deportes/" class="cat-card h-100">
+            <img src="{% static 'core/img/home-deportes.jpg' %}" alt="Categoría Deportes" />
             <h3>Deportes</h3>
           </a>
         </div>
 
         <div class="col-12 col-md-6 col-lg-4">
-          <a href="categorias/rpg.html" class="cat-card h-100">
-            <img src="img/home-rpg.jpg" alt="Categoría RPG" />
+          <a href="/rpg/" class="cat-card h-100">
+            <img src="{% static 'core/img/home-rpg.jpg' %}" alt="Categoría RPG" />
             <h3>RPG</h3>
           </a>
         </div>
@@ -93,7 +99,6 @@
     </section>
   </main>
 
-  <!-- PIE DE PÁGINA -->
   <footer class="site-footer">
     <div class="container">
       <p>© <span id="anio"></span> Digitalnext. Todos los derechos reservados.</p>

@@ -31,7 +31,11 @@
               <li><a href="/deportes/">Deportes</a></li>
               <li><a href="/rpg/">RPG</a></li>
               <li><a href="/registro/">Registro</a></li>
-              <li><a href="/login/">Iniciar Sesión</a></li>
+              {% if user.is_authenticated %}
+                <li><a href="/logout/">Cerrar Sesión</a></li>
+              {% else %}
+                <li><a href="/login/">Iniciar Sesión</a></li>
+              {% endif %}
             </ul>
           </div>
         </nav>
@@ -41,8 +45,6 @@
 
   <nav class="breadcrumb container">
     <a href="/">Inicio</a>
-    <span>›</span>
-    <a href="/login/">Iniciar Sesión</a>
     <span>›</span>
     <span>Mi Perfil</span>
   </nav>
@@ -55,6 +57,16 @@
 
     <div class="row justify-content-center mb-5">
       <div class="col-12 col-md-10 col-lg-8">
+
+        {% if messages %}
+          <div class="mb-4">
+            {% for message in messages %}
+              <div class="alert alert-{{ message.tags }}">
+                {{ message }}
+              </div>
+            {% endfor %}
+          </div>
+        {% endif %}
 
         <ul class="nav nav-tabs mb-4" id="perfilTabs">
           <li class="nav-item">
@@ -71,32 +83,33 @@
 
         <div class="tab-content">
 
-          <!-- TAB 1: Datos personales -->
           <div class="tab-pane fade show active" id="datos">
             <div class="form-card">
               <div class="card-body p-4">
-                <form id="formPerfil" novalidate>
+                <form id="formPerfil" method="POST" action="" novalidate>
+                  {% csrf_token %}
+                  <input type="hidden" name="form_type" value="actualizar_perfil">
+
                   <div class="row g-3">
                     <div class="col-12">
                       <label for="perfilNombre" class="form-label">Nombre completo *</label>
                       <input type="text" id="perfilNombre" name="perfilNombre" class="form-control"
-                             value="Juan Pérez González" placeholder="Ej: Juan Pérez González" />
+                             value="{{ user.first_name }}" placeholder="Ej: Juan Pérez" required />
                     </div>
                     <div class="col-12 col-md-6">
-                      <label for="perfilUsername" class="form-label">Nombre de usuario *</label>
+                      <label for="perfilUsername" class="form-label">Nombre de usuario</label>
                       <input type="text" id="perfilUsername" name="perfilUsername" class="form-control"
-                             value="juanp99" placeholder="Ej: juanp99" />
-                      <div class="form-text">Entre 3 y 20 caracteres, sin espacios.</div>
+                             value="{{ user.username }}" disabled />
+                      <div class="form-text">El nombre de usuario no puede modificarse.</div>
                     </div>
                     <div class="col-12 col-md-6">
                       <label for="perfilEmail" class="form-label">Correo electrónico *</label>
                       <input type="email" id="perfilEmail" name="perfilEmail" class="form-control"
-                             value="juan@correo.com" placeholder="Ej: juan@correo.com" />
+                             value="{{ user.email }}" required />
                     </div>
                     <div class="col-12 col-md-6">
                       <label for="perfilFecha" class="form-label">Fecha de nacimiento *</label>
-                      <input type="date" id="perfilFecha" name="perfilFecha" class="form-control"
-                             value="1999-05-15" />
+                      <input type="date" id="perfilFecha" name="perfilFecha" class="form-control" />
                       <div class="form-text">Debes tener al menos 13 años.</div>
                     </div>
                     <div class="col-12 col-md-6">
@@ -104,17 +117,12 @@
                         Dirección de despacho <span class="form-text">(opcional)</span>
                       </label>
                       <input type="text" id="perfilDireccion" name="perfilDireccion" class="form-control"
-                             value="Av. Providencia 1234, Santiago" placeholder="Ej: Av. Providencia 1234, Santiago" />
-                    </div>
-                    <div class="col-12">
-                      <label class="form-label">Tipo de usuario</label>
-                      <input type="text" class="form-control" value="Cliente" disabled />
-                      <div class="form-text">El tipo de usuario no puede modificarse.</div>
+                             placeholder="Ej: Av. Providencia 1234" />
                     </div>
                   </div>
                   <div class="d-flex gap-2 mt-4">
                     <button type="submit" class="btn btn-primary">Guardar cambios</button>
-                    <a href="/" class="btn btn-outline">Cancelar</a>
+                    <a href="/" class="btn btn-outline">Volver al inicio</a>
                   </div>
                   <p class="form-text mt-3">* Campos obligatorios.</p>
                 </form>
@@ -122,30 +130,32 @@
             </div>
           </div>
 
-          <!-- TAB 2: Cambiar contraseña -->
           <div class="tab-pane fade" id="cambiarPassword">
             <div class="form-card">
               <div class="card-body p-4">
-                <form id="formCambiarPassword" novalidate>
+                <form id="formCambiarPassword" method="POST" action="" novalidate>
+                  {% csrf_token %}
+                  <input type="hidden" name="form_type" value="cambiar_password">
+
                   <div class="row g-3">
                     <div class="col-12">
                       <label for="passwordActual" class="form-label">Contraseña actual *</label>
                       <div class="input-group">
-                        <input type="password" id="passwordActual" name="passwordActual" class="form-control" />
+                        <input type="password" id="passwordActual" name="passwordActual" class="form-control" required />
                         <button class="btn btn-outline" type="button" id="toggleActual">Mostrar</button>
                       </div>
                     </div>
                     <div class="col-12 col-md-6">
                       <label for="passwordNueva" class="form-label">Nueva contraseña *</label>
                       <div class="input-group">
-                        <input type="password" id="passwordNueva" name="passwordNueva" class="form-control" />
+                        <input type="password" id="passwordNueva" name="passwordNueva" class="form-control" required />
                         <button class="btn btn-outline" type="button" id="toggleNuevaP">Mostrar</button>
                       </div>
                       <div class="form-text">6–18 caracteres, al menos 1 mayúscula, 1 número y 1 carácter especial.</div>
                     </div>
                     <div class="col-12 col-md-6">
                       <label for="passwordConfirmar" class="form-label">Repetir nueva contraseña *</label>
-                      <input type="password" id="passwordConfirmar" name="passwordConfirmar" class="form-control" />
+                      <input type="password" id="passwordConfirmar" name="passwordConfirmar" class="form-control" required />
                     </div>
                   </div>
                   <div class="d-flex gap-2 mt-4">
@@ -173,6 +183,22 @@
   <script src="{% static 'core/js/validacion.js' %}"></script>
   <script>
     document.getElementById('anio').textContent = new Date().getFullYear();
+
+    // Toggle para contraseñas
+    function setupPasswordToggle(toggleBtnId, inputId) {
+      const btn = document.getElementById(toggleBtnId);
+      const input = document.getElementById(inputId);
+      if (btn && input) {
+        btn.addEventListener('click', function() {
+          const type = input.getAttribute('type') === 'password' ? 'text' : 'password';
+          input.setAttribute('type', type);
+          this.textContent = type === 'password' ? 'Mostrar' : 'Ocultar';
+        });
+      }
+    }
+
+    setupPasswordToggle('toggleActual', 'passwordActual');
+    setupPasswordToggle('toggleNuevaP', 'passwordNueva');
   </script>
 
 </body>

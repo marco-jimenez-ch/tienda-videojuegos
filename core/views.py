@@ -1,10 +1,12 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.contrib.auth.models import User
+from .models import Perfil, Rol
 
 
-# ─── PÚBLICAS ────────────────────────────────────────────────────────────────
+# ─── AUTENTICACIÓN ────────────────────────────────────────────────────────────
 
 def login_view(request):
     if request.user.is_authenticated:
@@ -13,18 +15,23 @@ def login_view(request):
     if request.method == 'POST':
         username = request.POST.get('loginEmail')
         password = request.POST.get('loginPassword')
-        
-        # Intentar buscar por email si no funciona como username
-        from django.contrib.auth.models import User
+
+        # Permitir login con email o username
         try:
             user_obj = User.objects.get(email=username)
             username = user_obj.username
         except User.DoesNotExist:
             pass
-        
+
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
+            # Redirigir según rol
+            try:
+                if user.perfil.es_admin():
+                    return redirect('admin_panel')
+            except Perfil.DoesNotExist:
+                pass
             return redirect('index')
         else:
             messages.error(request, 'Correo o contraseña incorrectos.')
@@ -35,10 +42,64 @@ def login_view(request):
 def registro(request):
     if request.user.is_authenticated:
         return redirect('index')
+
+    if request.method == 'POST':
+        nombre_completo  = request.POST.get('nombreCompleto', '').strip()
+        username         = request.POST.get('username', '').strip()
+        email            = request.POST.get('email', '').strip()
+        password         = request.POST.get('password', '')
+        confirm_pass     = request.POST.get('confirmPassword', '')
+        fecha_nacimiento = request.POST.get('fechaNacimiento') or None
+        direccion        = request.POST.get('direccion', '').strip()
+
+        if password != confirm_pass:
+            messages.error(request, 'Las contraseñas no coinciden.')
+            return render(request, 'core/registro.html')
+
+        if User.objects.filter(username=username).exists():
+            messages.error(request, 'El nombre de usuario ya está en uso.')
+            return render(request, 'core/registro.html')
+
+        if User.objects.filter(email=email).exists():
+            messages.error(request, 'El correo electrónico ya está registrado.')
+            return render(request, 'core/registro.html')
+
+        try:
+            user = User.objects.create_user(
+                username=username,
+                email=email,
+                password=password,
+                first_name=nombre_completo,
+            )
+            # Obtener o crear rol "usuario" por defecto
+            rol_usuario, _ = Rol.objects.get_or_create(
+                nombre='usuario',
+                defaults={'descripcion': 'Usuario estándar de la tienda'}
+            )
+            Perfil.objects.create(
+                usuario=user,
+                rol=rol_usuario,
+                nombre_completo=nombre_completo,
+                fecha_nacimiento=fecha_nacimiento,
+                direccion=direccion,
+            )
+            messages.success(request, '¡Cuenta creada correctamente! Ya puedes iniciar sesión.')
+            return redirect('login')
+        except Exception as e:
+            messages.error(request, 'Ocurrió un error al crear la cuenta. Inténtalo de nuevo.')
+
     return render(request, 'core/registro.html')
 
 
 def recuperar(request):
+    if request.method == 'POST':
+        email = request.POST.get('emailRecuperar', '').strip()
+        # Lógica simulada — en producción se enviaría un correo real
+        if User.objects.filter(email=email).exists():
+            messages.success(request, 'Si el correo está registrado, recibirás las instrucciones pronto.')
+        else:
+            messages.error(request, 'No existe una cuenta con ese correo.')
+        return redirect('recuperar')
     return render(request, 'core/recuperar.html')
 
 
@@ -47,51 +108,96 @@ def logout_view(request):
     return redirect('login')
 
 
-# ─── PROTEGIDAS ──────────────────────────────────────────────────────────────
+# ─── CATÁLOGO PÚBLICO ─────────────────────────────────────────────────────────
 
-@login_required
 def index(request):
     return render(request, 'core/index.html')
 
+def accion(request):
+    return render(request, 'core/accion.html')
+
+def aventura(request):
+    return render(request, 'core/aventura.html')
+
+def fps(request):
+    return render(request, 'core/fps.html')
+
+def deportes(request):
+    return render(request, 'core/deportes.html')
+
+def rpg(request):
+    return render(request, 'core/rpg.html')
+
+def ficha_producto(request):
+    return render(request, 'core/ficha-producto.html')
+
+
+# ─── PROTEGIDAS (Solo usuarios autenticados) ──────────────────────────────────
 
 @login_required
 def perfil(request):
-    return render(request, 'core/perfil.html')
+    try:
+        perfil_obj = request.user.perfil
+    except Perfil.DoesNotExist:
+        perfil_obj = None
+
+    if request.method == 'POST':
+        form_type = request.POST.get('form_type')
+
+        if form_type == 'actualizar_perfil':
+            nombre    = request.POST.get('perfilNombre', '').strip()
+            email     = request.POST.get('perfilEmail', '').strip()
+            fecha     = request.POST.get('perfilFecha') or None
+            direccion = request.POST.get('perfilDireccion', '').strip()
+
+            if User.objects.filter(email=email).exclude(id=request.user.id).exists():
+                messages.error(request, 'El correo electrónico ya está en uso por otra cuenta.')
+            else:
+                request.user.first_name = nombre
+                request.user.email = email
+                request.user.save()
+
+                if perfil_obj:
+                    perfil_obj.nombre_completo  = nombre
+                    perfil_obj.fecha_nacimiento = fecha
+                    perfil_obj.direccion        = direccion
+                    perfil_obj.save()
+
+                messages.success(request, 'Perfil actualizado correctamente.')
+            return redirect('perfil')
+
+        elif form_type == 'cambiar_password':
+            password_actual    = request.POST.get('passwordActual', '')
+            password_nueva     = request.POST.get('passwordNueva', '')
+            password_confirmar = request.POST.get('passwordConfirmar', '')
+
+            if not request.user.check_password(password_actual):
+                messages.error(request, 'La contraseña actual es incorrecta.')
+            elif password_nueva != password_confirmar:
+                messages.error(request, 'Las contraseñas nuevas no coinciden.')
+            else:
+                request.user.set_password(password_nueva)
+                request.user.save()
+                update_session_auth_hash(request, request.user)
+                messages.success(request, 'Contraseña actualizada con éxito.')
+            return redirect('perfil')
+
+    return render(request, 'core/perfil.html', {
+        'usuario': request.user,
+        'perfil':  perfil_obj,
+    })
 
 
 @login_required
 def admin_panel(request):
+    # Solo administradores pueden acceder
+    try:
+        if not request.user.perfil.es_admin():
+            messages.error(request, 'No tienes permisos para acceder a esta página.')
+            return redirect('index')
+    except Perfil.DoesNotExist:
+        return redirect('index')
     return render(request, 'core/admin.html')
-
-
-@login_required
-def accion(request):
-    return render(request, 'core/accion.html')
-
-
-@login_required
-def aventura(request):
-    return render(request, 'core/aventura.html')
-
-
-@login_required
-def fps(request):
-    return render(request, 'core/fps.html')
-
-
-@login_required
-def deportes(request):
-    return render(request, 'core/deportes.html')
-
-
-@login_required
-def rpg(request):
-    return render(request, 'core/rpg.html')
-
-
-@login_required
-def ficha_producto(request):
-    return render(request, 'core/ficha-producto.html')
 
 
 @login_required
