@@ -1,11 +1,11 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Digitalnext — Carrito de Compras</title>
+  <title>Digitalnext — Carrito</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-  {% load static %}
   <link rel="stylesheet" href="{% static 'core/css/styles.css' %}" />
 </head>
 <body>
@@ -30,8 +30,9 @@
               <li><a href="/fps/">FPS</a></li>
               <li><a href="/deportes/">Deportes</a></li>
               <li><a href="/rpg/">RPG</a></li>
-              <li><a href="/registro/">Registro</a></li>
-              <li><a href="/login/">Iniciar Sesión</a></li>
+              <li><a href="/perfil/">Mi Perfil</a></li>
+              <li><a href="/carrito/" class="active">Carrito</a></li>
+              <li><a href="/logout/">Cerrar Sesión</a></li>
             </ul>
           </div>
         </nav>
@@ -42,109 +43,78 @@
   <nav class="breadcrumb container">
     <a href="/">Inicio</a>
     <span>›</span>
-    <span>Carrito de Compras</span>
+    <span>Carrito</span>
   </nav>
 
-  <main class="container">
+  <main class="container mb-5">
     <header class="page-header">
-      <h1>Carrito de Compras</h1>
-      <p>Revisa los productos seleccionados antes de continuar.</p>
+      <h1>Mi Carrito</h1>
     </header>
 
-    <div class="row g-4">
+    {% if messages %}
+      {% for message in messages %}
+        <div class="alert alert-success mb-3">{{ message }}</div>
+      {% endfor %}
+    {% endif %}
 
-      <!-- Listado de productos -->
-      <div class="col-12 col-lg-8">
-        <div class="form-card">
-          <div class="card-body p-4">
+    {% if detalles %}
 
-            <!-- Producto 1 -->
-            <div class="row align-items-center g-3 pb-3" style="border-bottom: 1px solid var(--surface-2, #333);">
-              <div class="col-3 col-md-2">
-                <img src="{% static 'core/img/accion-1.jpg' %} alt="Devil May Cry 5"
-                     class="img-fluid rounded"
-                     style="aspect-ratio:1/1; object-fit:cover;" />
-              </div>
-              <div class="col-9 col-md-6">
-                <h5 style="margin-bottom: 4px;">Devil May Cry 5</h5>
-                <p class="game-platform">PC · PS5 · Xbox</p>
-              </div>
-              <div class="col-6 col-md-2 d-flex align-items-center gap-2">
-                <input type="number" value="1" min="1" max="10"
-                       class="form-control"
-                       style="width: 70px;"
-                       id="cantidad1" />
-              </div>
-              <div class="col-6 col-md-2 text-end">
-                <span class="price" id="precio1">$19.990</span>
-                <br/>
-                <button class="btn btn-outline mt-2"
-                        style="font-size:0.8rem; padding: 4px 10px;"
-                        onclick="eliminarProducto(this)">Eliminar</button>
-              </div>
+      <div class="form-card mb-4">
+        <div class="card-body p-4">
+          {% for detalle in detalles %}
+          <div class="row align-items-center g-3 py-3" style="border-bottom: 1px solid var(--surface-2, #333);">
+
+            <div class="col-3 col-md-2">
+              <img src="{% static 'core/img/' %}{{ detalle.producto.imagen }}"
+                   alt="{{ detalle.producto.nombre }}"
+                   class="img-fluid rounded"
+                   style="aspect-ratio:1/1; object-fit:cover;" />
             </div>
 
-            <!-- Producto 2 -->
-            <div class="row align-items-center g-3 pt-3">
-              <div class="col-3 col-md-2">
-                <img src="{% static 'core/img/accion-2.jpg' %} alt="Bayonetta 3"
-                     class="img-fluid rounded"
-                     style="aspect-ratio:1/1; object-fit:cover;" />
-              </div>
-              <div class="col-9 col-md-6">
-                <h5 style="margin-bottom: 4px;">Bayonetta 3</h5>
-                <p class="game-platform">Nintendo Switch</p>
-              </div>
-              <div class="col-6 col-md-2 d-flex align-items-center gap-2">
-                <input type="number" value="1" min="1" max="10"
-                       class="form-control"
-                       style="width: 70px;"
-                       id="cantidad2" />
-              </div>
-              <div class="col-6 col-md-2 text-end">
-                <span class="price" id="precio2">$22.990</span>
-                <br/>
-                <button class="btn btn-outline mt-2"
-                        style="font-size:0.8rem; padding: 4px 10px;"
-                        onclick="eliminarProducto(this)">Eliminar</button>
-              </div>
+            <div class="col-9 col-md-5">
+              <h5 class="mb-1">{{ detalle.producto.nombre }}</h5>
+              <p class="game-platform mb-0">{{ detalle.producto.plataforma }}</p>
             </div>
 
+            <div class="col-6 col-md-2 text-center">
+              <span class="form-text">Cantidad: {{ detalle.cantidad }}</span>
+            </div>
+
+            <div class="col-3 col-md-2 text-end">
+              <span class="price">${{ detalle.subtotal }}</span>
+            </div>
+
+            <div class="col-3 col-md-1 text-end">
+              <a href="/carrito/eliminar/{{ detalle.id }}/"
+                 class="btn btn-outline"
+                 style="color:#ef4444; border-color:#ef4444; padding: 4px 10px;"
+                 onclick="return confirm('¿Eliminar este producto del carrito?')">✕</a>
+            </div>
+
+          </div>
+          {% endfor %}
+
+          <div class="d-flex justify-content-end align-items-center gap-3 mt-4">
+            <span style="font-size:1.1rem;">Total:</span>
+            <span class="price" style="font-size:1.8rem;">${{ total }}</span>
           </div>
         </div>
       </div>
 
-      <!-- Resumen del pedido -->
-      <div class="col-12 col-lg-4">
-        <div class="form-card">
-          <div class="card-body p-4">
-            <h3 style="margin-bottom: 16px;">Resumen del pedido</h3>
-
-            <div class="d-flex justify-content-between mb-2">
-              <span style="color: var(--muted);">Subtotal</span>
-              <span id="subtotal">$42.980</span>
-            </div>
-            <div class="d-flex justify-content-between mb-2">
-              <span style="color: var(--muted);">Despacho</span>
-              <span>$2.990</span>
-            </div>
-            <hr style="border-color: var(--surface-2, #333);" />
-            <div class="d-flex justify-content-between mb-4">
-              <strong>Total</strong>
-              <strong id="total" class="price">$45.970</strong>
-            </div>
-
-            <a href="/checkout/" class="btn btn-primary w-100">
-              Proceder al pago
-            </a>
-            <a href="/" class="btn btn-outline w-100 mt-2">
-              Seguir comprando
-            </a>
-          </div>
-        </div>
+      <div class="d-flex gap-2 justify-content-end">
+        <a href="/" class="btn btn-outline">Seguir comprando</a>
+        <a href="/checkout/" class="btn btn-primary">Proceder al pago</a>
       </div>
 
-    </div>
+    {% else %}
+      <div class="form-card">
+        <div class="card-body p-4 text-center">
+          <p style="font-size:1.2rem; color:var(--muted);">Tu carrito está vacío.</p>
+          <a href="/" class="btn btn-primary mt-2">Ver catálogo</a>
+        </div>
+      </div>
+    {% endif %}
+
   </main>
 
   <footer class="site-footer">
@@ -156,11 +126,6 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script>
     document.getElementById('anio').textContent = new Date().getFullYear();
-
-    function eliminarProducto(btn) {
-      const fila = btn.closest('.row');
-      fila.remove();
-    }
   </script>
 
 </body>

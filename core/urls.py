@@ -16,5 +16,7 @@ urlpatterns = [
     path('rpg/', views.rpg, name='rpg'),
     path('ficha-producto/<int:producto_id>/', views.ficha_producto, name='ficha_producto'),
     path('carrito/', views.carrito, name='carrito'),
+    path('carrito/agregar/<int:producto_id>/', views.agregar_carrito, name='agregar_carrito'),
+    path('carrito/eliminar/<int:detalle_id>/', views.eliminar_carrito, name='eliminar_carrito'),
     path('checkout/', views.checkout, name='checkout'),
 ]

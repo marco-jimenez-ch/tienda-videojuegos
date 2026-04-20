@@ -134,9 +134,19 @@ def rpg(request):
     return render(request, 'core/rpg.html', {'productos': productos})
 
 def ficha_producto(request, producto_id):
-    from django.shortcuts import get_object_or_404
     producto = get_object_or_404(Producto, id=producto_id, activo=True)
-    return render(request, 'core/ficha-producto.html', {'producto': producto})
+    slugs = {
+        'Acción':   'accion',
+        'Aventura': 'aventura',
+        'FPS':      'fps',
+        'Deportes': 'deportes',
+        'RPG':      'rpg',
+    }
+    categoria_slug = slugs.get(producto.categoria.nombre, 'accion')
+    return render(request, 'core/ficha-producto.html', {
+        'producto':       producto,
+        'categoria_slug': categoria_slug,
+    })
 
 
 # ─── PROTEGIDAS (Solo usuarios autenticados) ──────────────────────────────────
@@ -209,9 +219,56 @@ def admin_panel(request):
 
 @login_required
 def carrito(request):
-    return render(request, 'core/carrito.html')
+    carrito_obj, _ = Carrito.objects.get_or_create(usuario=request.user, activo=True)
+    detalles = carrito_obj.detallecarrito_set.select_related('producto').all()
+    total = sum(d.subtotal() for d in detalles)
+    return render(request, 'core/carrito.html', {
+        'carrito':  carrito_obj,
+        'detalles': detalles,
+        'total':    total,
+    })
+
+
+@login_required
+def agregar_carrito(request, producto_id):
+    producto = get_object_or_404(Producto, id=producto_id, activo=True)
+    carrito_obj, _ = Carrito.objects.get_or_create(usuario=request.user, activo=True)
+    detalle, creado = DetalleCarrito.objects.get_or_create(
+        carrito=carrito_obj,
+        producto=producto,
+        defaults={'precio_unitario': producto.precio, 'cantidad': 1}
+    )
+    if not creado:
+        detalle.cantidad += 1
+        detalle.save()
+    messages.success(request, f'"{producto.nombre}" agregado al carrito.')
+    return redirect('carrito')
+
+
+@login_required
+def eliminar_carrito(request, detalle_id):
+    detalle = get_object_or_404(DetalleCarrito, id=detalle_id, carrito__usuario=request.user)
+    nombre = detalle.producto.nombre
+    detalle.delete()
+    messages.success(request, f'"{nombre}" eliminado del carrito.')
+    return redirect('carrito')
 
 
 @login_required
 def checkout(request):
-    return render(request, 'core/checkout.html')
+    carrito_obj, _ = Carrito.objects.get_or_create(usuario=request.user, activo=True)
+    detalles = carrito_obj.detallecarrito_set.select_related('producto').all()
+    total = sum(d.subtotal() for d in detalles)
+
+    if request.method == 'POST':
+        detalles.delete()
+        carrito_obj.activo = False
+        carrito_obj.save()
+        messages.success(request, '¡Compra realizada con éxito! Gracias por tu pedido.')
+        return redirect('index')
+
+    return render(request, 'core/checkout.html', {
+        'carrito':  carrito_obj,
+        'detalles': detalles,
+        'total':    total,
+    })

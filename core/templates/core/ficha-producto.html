@@ -48,7 +48,7 @@
   <nav class="breadcrumb container">
     <a href="/">Inicio</a>
     <span>›</span>
-    <a href="/{{ producto.categoria.nombre|lower }}/">{{ producto.categoria.nombre }}</a>
+    <a href="/{{ categoria_slug }}/">{{ producto.categoria.nombre }}</a>
     <span>›</span>
     <span>{{ producto.nombre }}</span>
   </nav>
@@ -90,11 +90,11 @@
 
             <div class="d-flex gap-2 flex-wrap">
               {% if user.is_authenticated %}
-                <a href="/carrito/" class="btn btn-primary">🛒 Agregar al carrito</a>
+                <a href="/carrito/agregar/{{ producto.id }}/" class="btn btn-primary">🛒 Agregar al carrito</a>
               {% else %}
                 <a href="/login/" class="btn btn-primary">Inicia sesión para comprar</a>
               {% endif %}
-              <a href="/{{ producto.categoria.nombre|lower }}/" class="btn btn-outline">Volver a {{ producto.categoria.nombre }}</a>
+              <a href="/{{ categoria_slug }}/" class="btn btn-outline">Volver a {{ producto.categoria.nombre }}</a>
             </div>
 
           </div>

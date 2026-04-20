@@ -46,6 +46,13 @@
   </header>
 
   <section class="hero">
+    {% if messages %}
+  <div class="container mt-3">
+    {% for message in messages %}
+      <div class="alert alert-success">{{ message }}</div>
+    {% endfor %}
+  </div>
+{% endif %}
     <div class="container">
       <h1>Bienvenido a Digitalnext</h1>
       <p>Explora nuestro catálogo de videojuegos y encuentra tu próxima aventura.</p>

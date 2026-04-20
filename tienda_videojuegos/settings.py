@@ -74,10 +74,18 @@ WSGI_APPLICATION = 'tienda_videojuegos.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.oracle',
+        'NAME': 'x22871sgbngfv9ky_tp',
+        'USER': 'ADMIN',
+        'PASSWORD': 'Digitalnext#2026',
+        'OPTIONS': {
+            'config_dir': '/Users/marcoantonio/Desktop/Documentos de Marco/DUOC/Programación web/00. Proyecto/tienda-videojuegos/wallet',
+            'wallet_location': '/Users/marcoantonio/Desktop/Documentos de Marco/DUOC/Programación web/00. Proyecto/tienda-videojuegos/wallet',
+            'wallet_password': 'Digitalnext#2026',
+        },
     }
 }
 
