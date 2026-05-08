@@ -7,6 +7,36 @@
   <title>Digitalnext — Catálogo de Videojuegos</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="{% static 'core/css/styles.css' %}" />
+  <style>
+    /* ── Sección juegos externos ── */
+    .juegos-externos-section { margin-top: 3rem; }
+    .juegos-externos-section h2 { margin-bottom: 0.25rem; }
+    .fuente-badge {
+      display: inline-block;
+      font-size: .75rem;
+      background: #6c757d;
+      color: #fff;
+      border-radius: 4px;
+      padding: 2px 8px;
+      margin-bottom: 1rem;
+    }
+    .juego-card {
+      border: 1px solid #dee2e6;
+      border-radius: 8px;
+      overflow: hidden;
+      height: 100%;
+      transition: transform .15s, box-shadow .15s;
+    }
+    .juego-card:hover { transform: translateY(-3px); box-shadow: 0 4px 12px rgba(0,0,0,.12); }
+    .juego-card img { width: 100%; height: 160px; object-fit: cover; }
+    .juego-card-body { padding: .75rem; }
+    .juego-card-body h6 { font-size: .9rem; font-weight: 600; margin-bottom: .25rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .juego-card-body .badge-genero { font-size: .7rem; }
+    .juego-card-body .rating { font-size: .8rem; color: #f5a623; }
+    #spinner-rawg, #spinner-free { text-align: center; padding: 2rem 0; }
+    .error-msg { color: #dc3545; font-size: .9rem; }
+    .tabs-fuente .nav-link { cursor: pointer; }
+  </style>
 </head>
 <body>
 
@@ -47,12 +77,12 @@
 
   <section class="hero">
     {% if messages %}
-  <div class="container mt-3">
-    {% for message in messages %}
-      <div class="alert alert-success">{{ message }}</div>
-    {% endfor %}
-  </div>
-{% endif %}
+    <div class="container mt-3">
+      {% for message in messages %}
+        <div class="alert alert-success">{{ message }}</div>
+      {% endfor %}
+    </div>
+    {% endif %}
     <div class="container">
       <h1>Bienvenido a Digitalnext</h1>
       <p>Explora nuestro catálogo de videojuegos y encuentra tu próxima aventura.</p>
@@ -63,6 +93,8 @@
   </section>
 
   <main class="container">
+
+    <!-- ── CATEGORÍAS PROPIAS ─────────────────────────────────── -->
     <section class="categories">
       <h2>Categorías</h2>
       <div class="row g-3">
@@ -104,6 +136,59 @@
 
       </div>
     </section>
+
+    <!-- ── JUEGOS DESDE APIs EXTERNAS ─────────────────────────── -->
+    <section class="juegos-externos-section">
+      <h2>Descubre más juegos</h2>
+      <p class="text-muted mb-3">Información en tiempo real desde servicios externos</p>
+
+      <!-- Tabs para cambiar entre fuentes -->
+      <ul class="nav nav-tabs tabs-fuente mb-3" id="tabFuente" role="tablist">
+        <li class="nav-item" role="presentation">
+          <button class="nav-link active" id="tab-rawg" data-bs-toggle="tab"
+                  data-bs-target="#panel-rawg" type="button" role="tab">
+            🎮 RAWG — Top juegos
+          </button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="tab-free" data-bs-toggle="tab"
+                  data-bs-target="#panel-free" type="button" role="tab">
+            🆓 FreeToGame — Juegos gratis
+          </button>
+        </li>
+      </ul>
+
+      <div class="tab-content" id="tabContent">
+
+        <!-- Panel RAWG -->
+        <div class="tab-pane fade show active" id="panel-rawg" role="tabpanel">
+          <span class="fuente-badge">Fuente: RAWG API — rawg.io</span>
+          <div id="spinner-rawg">
+            <div class="spinner-border text-secondary" role="status">
+              <span class="visually-hidden">Cargando...</span>
+            </div>
+            <p class="mt-2 text-muted">Consultando RAWG API…</p>
+          </div>
+          <div id="error-rawg" class="error-msg d-none"></div>
+          <div class="row g-3" id="grid-rawg"></div>
+        </div>
+
+        <!-- Panel FreeToGame -->
+        <div class="tab-pane fade" id="panel-free" role="tabpanel">
+          <span class="fuente-badge">Fuente: FreeToGame API — freetogame.com</span>
+          <div id="spinner-free">
+            <div class="spinner-border text-secondary" role="status">
+              <span class="visually-hidden">Cargando...</span>
+            </div>
+            <p class="mt-2 text-muted">Consultando FreeToGame API…</p>
+          </div>
+          <div id="error-free" class="error-msg d-none"></div>
+          <div class="row g-3" id="grid-free"></div>
+        </div>
+
+      </div>
+    </section>
+
   </main>
 
   <footer class="site-footer">
@@ -115,6 +200,113 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script>
     document.getElementById('anio').textContent = new Date().getFullYear();
+
+    /* ── Utilidades ─────────────────────────────────────────────── */
+    function mostrarError(elementId, mensaje) {
+      const el = document.getElementById(elementId);
+      el.textContent = '⚠️ ' + mensaje;
+      el.classList.remove('d-none');
+    }
+
+    function ocultarSpinner(spinnerId) {
+      document.getElementById(spinnerId).classList.add('d-none');
+    }
+
+    /* ── RAWG API ───────────────────────────────────────────────── */
+    async function cargarRAWG() {
+      try {
+        const resp = await fetch('/api/juegos-rawg/');
+        if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+        const data = await resp.json();
+
+        ocultarSpinner('spinner-rawg');
+
+        if (!data.juegos || data.juegos.length === 0) {
+          mostrarError('error-rawg', 'No se encontraron juegos en este momento.');
+          return;
+        }
+
+        const grid = document.getElementById('grid-rawg');
+        data.juegos.forEach(j => {
+          const generos = (j.generos || []).join(', ') || 'Sin género';
+          const imagen  = j.imagen || 'https://via.placeholder.com/300x160?text=Sin+imagen';
+          const rating  = j.rating ? `⭐ ${parseFloat(j.rating).toFixed(1)}` : '';
+
+          grid.innerHTML += `
+            <div class="col-6 col-md-4 col-lg-3">
+              <div class="juego-card">
+                <img src="${imagen}" alt="${j.titulo}" loading="lazy"
+                     onerror="this.src='https://via.placeholder.com/300x160?text=Sin+imagen'">
+                <div class="juego-card-body">
+                  <h6 title="${j.titulo}">${j.titulo}</h6>
+                  <span class="badge bg-secondary badge-genero">${generos}</span>
+                  <div class="rating mt-1">${rating}</div>
+                  ${j.lanzamiento ? `<small class="text-muted d-block mt-1">${j.lanzamiento}</small>` : ''}
+                </div>
+              </div>
+            </div>`;
+        });
+
+      } catch (err) {
+        ocultarSpinner('spinner-rawg');
+        mostrarError('error-rawg', 'No se pudo conectar con RAWG API. Intenta más tarde.');
+        console.error('RAWG error:', err);
+      }
+    }
+
+    /* ── FreeToGame API ─────────────────────────────────────────── */
+    async function cargarFreeToGame() {
+      try {
+        const resp = await fetch('/api/juegos-externos/');
+        if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+        const data = await resp.json();
+
+        ocultarSpinner('spinner-free');
+
+        if (!data.juegos || data.juegos.length === 0) {
+          mostrarError('error-free', 'No se encontraron juegos gratuitos en este momento.');
+          return;
+        }
+
+        const grid = document.getElementById('grid-free');
+        data.juegos.forEach(j => {
+          const imagen = j.imagen || 'https://via.placeholder.com/300x160?text=Sin+imagen';
+
+          grid.innerHTML += `
+            <div class="col-6 col-md-4 col-lg-3">
+              <div class="juego-card">
+                <img src="${imagen}" alt="${j.titulo}" loading="lazy"
+                     onerror="this.src='https://via.placeholder.com/300x160?text=Sin+imagen'">
+                <div class="juego-card-body">
+                  <h6 title="${j.titulo}">${j.titulo}</h6>
+                  <span class="badge bg-success badge-genero">${j.genero || 'Sin género'}</span>
+                  <small class="text-muted d-block mt-1">${j.plataforma || ''}</small>
+                  ${j.url ? `<a href="${j.url}" target="_blank" rel="noopener" class="btn btn-sm btn-outline-primary mt-2 w-100">Jugar gratis</a>` : ''}
+                </div>
+              </div>
+            </div>`;
+        });
+
+      } catch (err) {
+        ocultarSpinner('spinner-free');
+        mostrarError('error-free', 'No se pudo conectar con FreeToGame API. Intenta más tarde.');
+        console.error('FreeToGame error:', err);
+      }
+    }
+
+    /* ── Carga al abrir el tab (lazy) ───────────────────────────── */
+    let rawgCargado  = false;
+    let freeCargado  = false;
+
+    // RAWG carga inmediato (tab activo por defecto)
+    cargarRAWG().then(() => rawgCargado = true);
+
+    // FreeToGame carga cuando el usuario abre ese tab
+    document.getElementById('tab-free').addEventListener('shown.bs.tab', function () {
+      if (!freeCargado) {
+        cargarFreeToGame().then(() => freeCargado = true);
+      }
+    });
   </script>
 
 </body>
