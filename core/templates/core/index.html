@@ -20,19 +20,50 @@
       padding: 2px 8px;
       margin-bottom: 1rem;
     }
+
+    /* Card base */
     .juego-card {
       border: 1px solid #dee2e6;
       border-radius: 8px;
       overflow: hidden;
       height: 100%;
+      display: flex;
+      flex-direction: column;
       transition: transform .15s, box-shadow .15s;
     }
-    .juego-card:hover { transform: translateY(-3px); box-shadow: 0 4px 12px rgba(0,0,0,.12); }
+    .juego-card:hover { transform: translateY(-3px); box-shadow: 0 4px 12px rgba(0,0,0,.2); }
     .juego-card img { width: 100%; height: 160px; object-fit: cover; }
-    .juego-card-body { padding: .75rem; }
-    .juego-card-body h6 { font-size: .9rem; font-weight: 600; margin-bottom: .25rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .juego-card-body {
+      padding: .75rem;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    .juego-card-body h6 {
+      font-size: .9rem;
+      font-weight: 600;
+      margin-bottom: .35rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
     .juego-card-body .badge-genero { font-size: .7rem; }
-    .juego-card-body .rating { font-size: .8rem; color: #f5a623; }
+    .juego-card-body .rating { font-size: .82rem; color: #f5a623; margin-top: .25rem; }
+    .juego-card-body .plataforma { font-size: .75rem; color: #adb5bd; margin-top: .2rem; }
+    .juego-card-body .btn-jugar {
+      margin-top: auto;
+      padding-top: .5rem;
+    }
+
+    /* Card RAWG clickeable */
+    a.juego-card-link {
+      text-decoration: none;
+      color: inherit;
+      display: block;
+      height: 100%;
+    }
+    a.juego-card-link .juego-card { cursor: pointer; }
+
     #spinner-rawg, #spinner-free { text-align: center; padding: 2rem 0; }
     .error-msg { color: #dc3545; font-size: .9rem; }
     .tabs-fuente .nav-link { cursor: pointer; }
@@ -142,7 +173,6 @@
       <h2>Descubre más juegos</h2>
       <p class="text-muted mb-3">Información en tiempo real desde servicios externos</p>
 
-      <!-- Tabs para cambiar entre fuentes -->
       <ul class="nav nav-tabs tabs-fuente mb-3" id="tabFuente" role="tablist">
         <li class="nav-item" role="presentation">
           <button class="nav-link active" id="tab-rawg" data-bs-toggle="tab"
@@ -228,22 +258,28 @@
 
         const grid = document.getElementById('grid-rawg');
         data.juegos.forEach(j => {
-          const generos = (j.generos || []).join(', ') || 'Sin género';
-          const imagen  = j.imagen || 'https://via.placeholder.com/300x160?text=Sin+imagen';
-          const rating  = j.rating ? `⭐ ${parseFloat(j.rating).toFixed(1)}` : '';
+          const generos  = (j.generos || []).join(', ') || 'Sin género';
+          const imagen   = j.imagen || 'https://via.placeholder.com/300x160?text=Sin+imagen';
+          const rating   = j.rating ? `⭐ ${parseFloat(j.rating).toFixed(1)}` : '';
+          const rawgUrl  = `https://rawg.io/games/${j.id}`;
 
           grid.innerHTML += `
             <div class="col-6 col-md-4 col-lg-3">
-              <div class="juego-card">
-                <img src="${imagen}" alt="${j.titulo}" loading="lazy"
-                     onerror="this.src='https://via.placeholder.com/300x160?text=Sin+imagen'">
-                <div class="juego-card-body">
-                  <h6 title="${j.titulo}">${j.titulo}</h6>
-                  <span class="badge bg-secondary badge-genero">${generos}</span>
-                  <div class="rating mt-1">${rating}</div>
-                  ${j.lanzamiento ? `<small class="text-muted d-block mt-1">${j.lanzamiento}</small>` : ''}
+              <a href="${rawgUrl}" target="_blank" rel="noopener" class="juego-card-link">
+                <div class="juego-card">
+                  <img src="${imagen}" alt="${j.titulo}" loading="lazy"
+                       onerror="this.src='https://via.placeholder.com/300x160?text=Sin+imagen'">
+                  <div class="juego-card-body">
+                    <h6 title="${j.titulo}">${j.titulo}</h6>
+                    <span class="badge bg-secondary badge-genero">${generos}</span>
+                    <div class="rating">${rating}</div>
+                    ${j.lanzamiento ? `<small class="text-muted d-block mt-1">${j.lanzamiento}</small>` : ''}
+                    <div class="btn-jugar">
+                      <span class="btn btn-sm btn-outline-light w-100">Ver en RAWG →</span>
+                    </div>
+                  </div>
                 </div>
-              </div>
+              </a>
             </div>`;
         });
 
@@ -270,7 +306,8 @@
 
         const grid = document.getElementById('grid-free');
         data.juegos.forEach(j => {
-          const imagen = j.imagen || 'https://via.placeholder.com/300x160?text=Sin+imagen';
+          const imagen    = j.imagen || 'https://via.placeholder.com/300x160?text=Sin+imagen';
+          const plataforma = j.plataforma || 'PC (Windows)';
 
           grid.innerHTML += `
             <div class="col-6 col-md-4 col-lg-3">
@@ -280,8 +317,13 @@
                 <div class="juego-card-body">
                   <h6 title="${j.titulo}">${j.titulo}</h6>
                   <span class="badge bg-success badge-genero">${j.genero || 'Sin género'}</span>
-                  <small class="text-muted d-block mt-1">${j.plataforma || ''}</small>
-                  ${j.url ? `<a href="${j.url}" target="_blank" rel="noopener" class="btn btn-sm btn-outline-primary mt-2 w-100">Jugar gratis</a>` : ''}
+                  <div class="plataforma">🖥 ${plataforma}</div>
+                  <div class="btn-jugar">
+                    <a href="${j.url}" target="_blank" rel="noopener"
+                       class="btn btn-sm btn-success w-100">
+                      🎮 Jugar gratis
+                    </a>
+                  </div>
                 </div>
               </div>
             </div>`;
@@ -294,14 +336,12 @@
       }
     }
 
-    /* ── Carga al abrir el tab (lazy) ───────────────────────────── */
-    let rawgCargado  = false;
-    let freeCargado  = false;
+    /* ── Carga ───────────────────────────────────────────────────── */
+    let rawgCargado = false;
+    let freeCargado = false;
 
-    // RAWG carga inmediato (tab activo por defecto)
     cargarRAWG().then(() => rawgCargado = true);
 
-    // FreeToGame carga cuando el usuario abre ese tab
     document.getElementById('tab-free').addEventListener('shown.bs.tab', function () {
       if (!freeCargado) {
         cargarFreeToGame().then(() => freeCargado = true);
