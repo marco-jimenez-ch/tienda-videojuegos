@@ -2,7 +2,7 @@ from pathlib import Path
 import os
 from datetime import timedelta
 from dotenv import load_dotenv
-load_dotenv ()
+load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -66,27 +66,31 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'tienda_videojuegos.wsgi.application'
 
-# ── Base de Datos — Oracle (credenciales por variables de entorno) ─────────────
-# Para correr localmente: configurar las variables de entorno o usar las rutas
-# absolutas del wallet en el archivo .env (NO subir a Git)
-WALLET_DIR = os.environ.get(
-    'ORACLE_WALLET_DIR',
-    str(BASE_DIR / 'wallet')   # ruta relativa al proyecto (fallback)
-)
+# ── Base de Datos ─────────────────────────────────────────────────────────────
+# Usa Oracle si hay wallet disponible, SQLite como fallback para producción
+WALLET_DIR = os.environ.get('ORACLE_WALLET_DIR', '')
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.oracle',
-        'NAME': os.environ.get('ORACLE_DB_NAME', 'x22871sgbngfv9ky_tp'),
-        'USER': os.environ.get('ORACLE_USER', 'ADMIN'),
-        'PASSWORD': os.environ.get('ORACLE_PASSWORD', 'Digitalnext#2026'),
-        'OPTIONS': {
-            'config_dir':       WALLET_DIR,
-            'wallet_location':  WALLET_DIR,
-            'wallet_password':  os.environ.get('ORACLE_WALLET_PASSWORD', 'Digitalnext#2026'),
-        },
+if WALLET_DIR and os.path.exists(WALLET_DIR):
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.oracle',
+            'NAME': os.environ.get('ORACLE_DB_NAME', 'x22871sgbngfv9ky_tp'),
+            'USER': os.environ.get('ORACLE_USER', 'ADMIN'),
+            'PASSWORD': os.environ.get('ORACLE_PASSWORD', 'Digitalnext#2026'),
+            'OPTIONS': {
+                'config_dir':      WALLET_DIR,
+                'wallet_location': WALLET_DIR,
+                'wallet_password': os.environ.get('ORACLE_WALLET_PASSWORD', 'Digitalnext#2026'),
+            },
+        }
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
 
 # ── Validadores de contraseña ─────────────────────────────────────────────────
 AUTH_PASSWORD_VALIDATORS = [
@@ -104,7 +108,7 @@ USE_TZ        = True
 
 # ── Archivos estáticos y media ────────────────────────────────────────────────
 STATIC_URL       = '/static/'
-STATIC_ROOT      = os.path.join(BASE_DIR, 'staticfiles')   # para collectstatic en producción
+STATIC_ROOT      = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'core/static')]
 MEDIA_URL        = '/media/'
 MEDIA_ROOT       = os.path.join(BASE_DIR, 'media')
@@ -143,12 +147,11 @@ SIMPLE_JWT = {
 }
 
 # ── CORS ──────────────────────────────────────────────────────────────────────
-# En desarrollo el frontend Django corre en el mismo servidor (mismo origen),
-# por lo que no requiere CORS. Se habilita para clientes externos (React, apps móviles).
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:3000',
     'http://127.0.0.1:3000',
     'http://localhost:8000',
     'http://127.0.0.1:8000',
 ]
+
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
