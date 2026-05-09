@@ -1,1 +1,1 @@
-web: python manage.py migrate --noinput && gunicorn tienda_videojuegos.wsgi:application --bind 0.0.0.0:$PORT
+web: mkdir -p /app/wallet && echo "$ORACLE_WALLET_B64" | base64 -d > /app/wallet/wallet.zip && unzip -o /app/wallet/wallet.zip -d /app/wallet && rm /app/wallet/wallet.zip && python manage.py migrate --noinput && gunicorn tienda_videojuegos.wsgi:application --bind 0.0.0.0:$PORT
