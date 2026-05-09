@@ -11,6 +11,7 @@ APIs externas consumidas:
   7. /api/juegos-rawg/        GET  — juegos desde RAWG API
 """
 
+import os
 import requests
 from rest_framework                 import generics, status
 from rest_framework.views           import APIView
@@ -137,19 +138,18 @@ def juegos_freetogame(request):
         resp.raise_for_status()
         datos = resp.json()
 
-        # Filtramos y simplificamos la respuesta
         juegos = [
             {
-                'id':          j.get('id'),
-                'titulo':      j.get('title'),
-                'genero':      j.get('genre'),
-                'plataforma':  j.get('platform'),
-                'imagen':      j.get('thumbnail'),
-                'url':         j.get('game_url'),
-                'publicador':  j.get('publisher'),
+                'id':            j.get('id'),
+                'titulo':        j.get('title'),
+                'genero':        j.get('genre'),
+                'plataforma':    j.get('platform'),
+                'imagen':        j.get('thumbnail'),
+                'url':           j.get('game_url'),
+                'publicador':    j.get('publisher'),
                 'desarrollador': j.get('developer'),
             }
-            for j in datos[:20]   # máximo 20 resultados
+            for j in datos[:20]
         ]
         return Response({'fuente': 'FreeToGame', 'total': len(juegos), 'juegos': juegos})
 
@@ -173,13 +173,15 @@ def juegos_rawg(request):
     Consume RAWG API y devuelve videojuegos con metadata rica.
     Parámetro opcional: ?buscar=zelda  o  ?genero=action
     Documentación: https://rawg.io/apidocs
-    Nota: RAWG permite uso sin API key en desarrollo (límite 20k req/mes)
     """
     buscar = request.query_params.get('buscar', '')
     genero = request.query_params.get('genero', '')
 
     url    = 'https://api.rawg.io/api/games'
-    params = {'page_size': 10}           # máximo 10 resultados
+    params = {
+        'page_size': 10,
+        'key': os.environ.get('RAWG_API_KEY', 'a8e406f98b174c8b884e103c157558a5'),
+    }
     if buscar:
         params['search'] = buscar
     if genero:
@@ -192,12 +194,12 @@ def juegos_rawg(request):
 
         juegos = [
             {
-                'id':        j.get('id'),
-                'titulo':    j.get('name'),
+                'id':          j.get('id'),
+                'titulo':      j.get('name'),
                 'lanzamiento': j.get('released'),
-                'rating':    j.get('rating'),
-                'imagen':    j.get('background_image'),
-                'generos':   [g['name'] for g in j.get('genres', [])],
+                'rating':      j.get('rating'),
+                'imagen':      j.get('background_image'),
+                'generos':     [g['name'] for g in j.get('genres', [])],
                 'plataformas': [p['platform']['name'] for p in j.get('platforms', [])],
             }
             for j in datos.get('results', [])

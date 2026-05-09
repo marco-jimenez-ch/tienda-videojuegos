@@ -1,4 +1,33 @@
+# macOS
+.DS_Store
 Thumbs.db
-desktop.ini.DS_Store
-**/.DS_Store
-tienda_videojuegos/settings.pygit 
+desktop.ini
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+dist/
+build/
+
+# Entorno virtual
+venv/
+.venv/
+env/
+
+# Django
+*.sqlite3
+staticfiles/
+media/
+
+# Variables de entorno — NUNCA subir a Git
+.env
+
+# Wallet Oracle — contiene credenciales privadas
+wallet/
+
+# IDEs
+.vscode/
+.idea/
